@@ -302,6 +302,9 @@ trait Client
         $json = json_decode((string)$response->getBody(), flags: JSON_THROW_ON_ERROR);
         $json = $this->fireHandlersBy(self::AFTER_API_REQUEST, [$json]) ?? $json;
 
+        $json->result->is_animated = $json->result->is_animated ?? false;
+        $json->result->is_video = $json->result->is_video ?? false;
+
         if (!$json?->ok) {
             $e = new TelegramException(
                 message: $json?->description ?? 'Client exception',
